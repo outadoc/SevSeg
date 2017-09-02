@@ -155,6 +155,7 @@ void SevSeg::begin(byte hardwareConfig, byte numDigitsIn, byte digitPinsIn[],
   resOnSegments = resOnSegmentsIn;
   updateWithDelays = updateWithDelaysIn;
   leadingZeros = leadingZerosIn;
+  leadingZeros_bck = leadingZerosIn;
 
   numDigits = numDigitsIn;
   //Limit the max number of digits to prevent overflowing
@@ -402,6 +403,14 @@ void SevSeg::setNumber(float numToShow, char decPlaces, bool hex) //float
 
 void SevSeg::setNewNum(long numToShow, char decPlaces, bool hex) {
   byte digits[numDigits];
+
+  if (numToShow > 99) {
+    numToShow -= 100;
+    leadingZeros = true;
+  } else {
+    leadingZeros = leadingZeros_bck;
+  }
+
   findDigits(numToShow, decPlaces, hex, digits);
   setDigitCodes(digits, decPlaces);
 }
@@ -469,6 +478,18 @@ void SevSeg::blank(void) {
   for (byte digitNum = 0 ; digitNum < numDigits ; digitNum++) {
     digitCodes[digitNum] = digitCodeMap[BLANK_IDX];
   }
+  refreshDisplay();
+}
+
+// blankWithDp
+/******************************************************************************/
+void SevSeg::blankWithDp(void) {
+  for (byte digitNum = 0 ; digitNum < numDigits ; digitNum++) {
+    digitCodes[digitNum] = digitCodeMap[BLANK_IDX];
+  }
+
+  // Set decimal point
+  digitCodes[numDigits-1] |= B10000000;
   refreshDisplay();
 }
 

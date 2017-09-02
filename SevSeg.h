@@ -65,6 +65,7 @@ public:
   void setSegments(byte segs[]);
   void setChars(char str[]);
   void blank(void);
+  void blankWithDp(void);
 
 private:
   void setNewNum(long numToShow, char decPlaces, bool hex=0);
@@ -72,7 +73,7 @@ private:
   void setDigitCodes(byte nums[], char decPlaces);
 
   bool digitOn,digitOff,segmentOn,segmentOff;
-  bool resOnSegments, updateWithDelays, leadingZeros;
+  bool resOnSegments, updateWithDelays, leadingZeros, leadingZeros_bck;
   byte digitPins[MAXNUMDIGITS];
   byte segmentPins[8];
   byte numDigits;
