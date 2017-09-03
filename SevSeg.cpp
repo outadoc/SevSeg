@@ -275,6 +275,20 @@ void SevSeg::refreshDisplay() {
       prevUpdateIdx++;
       if (prevUpdateIdx >= numDigits) prevUpdateIdx = 0;
 
+      // If this digit is blank anyway, skip to the next digit.
+      // Might as well only display this one.
+      // This is particularly useful when we want to display a single digit
+      // *and* disable interrupts. Previously, half the time, the display
+      // would be stuck with the digit off, and therefore everything off.
+      //
+      // Note that this is a hack that shouldn't be merged into anything,
+      // is only useful when using two digits in a pretty bad usecase, and
+      // only for this configuration branch.
+      if (digitCodes[prevUpdateIdx] == 0x00) {
+        prevUpdateIdx++;
+        if (prevUpdateIdx >= numDigits) prevUpdateIdx = 0;
+      }
+
       byte digitNum = prevUpdateIdx;
 
       // Illuminate the required segments for the new digit
