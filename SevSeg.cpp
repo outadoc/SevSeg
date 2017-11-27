@@ -419,7 +419,7 @@ void SevSeg::setNewNum(long numToShow, char decPlaces, bool hex) {
   byte digits[numDigits];
 
   if (numToShow > 99) {
-    numToShow -= 100;
+    numToShow %= 100;
     leadingZeros = true;
   } else {
     leadingZeros = leadingZeros_bck;
